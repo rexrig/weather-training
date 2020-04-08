@@ -43,7 +43,7 @@ app.get('/about', (req, res) => {
 app.get('/weather', (req, res) => {
     if (!req.query.location) {
         return res.send({
-            error: 'You must provide a search term'
+            error: ''
         })
     }
     const address = req.query.location
