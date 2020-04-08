@@ -8,7 +8,7 @@ const forecast = require('./utils/forecast')
 
 
 const app = express()
-
+const port = process.env.PORT || 3000
 
 //Define Paths for express config
 const publicDirectoryPath = path.join(__dirname, '../public')
@@ -47,33 +47,34 @@ app.get('/weather', (req, res) => {
         })
     }
     const address = req.query.location
-    geocode(address, (error, { latitude, longitude, location }={}) => {
+    geocode(address, (error, { latitude, longitude, location } = {}) => {
         if (error) {
-            return res.send({error: 'Geocode failed'})
+            return res.send({ error: 'Geocode failed' })
         }
         forecast(latitude, longitude, (error, forecastData) => {
             if (error) {
-                return console.log({error: 'forcast failed'})
+                return console.log({ error: 'forcast failed' })
             }
             res.send({
                 forcast: forecastData,
                 location,
-                address: req.query.location})
+                address: req.query.location
+            })
         })
     })
 
-        
-    })
 
-    app.get('/help/*', (req, res) => {
-        res.render('404-error', { title: 'Error', name: 'Rex Righetti', error: 'Help Page Not Found' })
-    })
-    app.get('*', (req, res) => {
-        res.render('404-error', { title: 'Error', name: 'Rex Righetti', error: ' Page Not Found' })
-    })
-    app.listen(3000, () => {
-        console.log('Server is running on port 3000')
-    })
+})
+
+app.get('/help/*', (req, res) => {
+    res.render('404-error', { title: 'Error', name: 'Rex Righetti', error: 'Help Page Not Found' })
+})
+app.get('*', (req, res) => {
+    res.render('404-error', { title: 'Error', name: 'Rex Righetti', error: ' Page Not Found' })
+})
+app.listen(port, () => {
+    console.log('Server is running on port ' +port)
+})
 
 
 
